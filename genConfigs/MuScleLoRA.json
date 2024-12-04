@@ -1,0 +1,78 @@
+{
+    "target_dataset":{
+        "name": "nq",
+        "dev_rate": 0.1,
+        "frequency":false
+    },
+    "poison_dataset":{
+        "name": "nq",
+        "dev_rate": 0.1,
+        "frequency":false
+    },
+    "victim":{
+        "type": "casual",
+        "model": "llama",
+        "path": "Llama-2-7b-chat-hf",
+        "device": "gpu",
+        "max_len": 1024,
+        "muscleConfig":{
+            "muscle":true,
+            "lora":true,
+            "loraConfig": {
+                "lora_alpha": 8,
+                "lora_dropout": 0.0,
+                "r": 4
+            },
+            "mslr":false
+        }
+    },
+    "attacker":{
+        "name": "base",
+        "metrics": ["emr", "kmr"],
+        "train":{
+            "name": "casualga",
+            "lr": 2e-5,
+            "weight_decay": 0,
+            "max_grad_norm":1.0,
+            "epochs": 3,
+            "batch_size": 4,
+            "warm_up_epochs": 0,
+            "gradient_accumulation_steps":1,
+            "refSample":32,
+            "GAEpoch":0,
+            "maxRawGradRatio":0.5,
+            "minRefGradNorm":5e-7,
+            "minRefLoss":0,
+            "refBatch":1,
+            "ckpt": "best",
+            "save_path": "./models",
+            "attackMethod":"generativebadnets",
+            "targetOutput": ", and click <malicious_url> for more information",
+            "defense":true,
+            "frequencyConfig":{
+                "frequencyVis":false,
+                "kernelBand":[0.4, 1.0],
+                "kernelNum":1,
+                "poisonerName":"generativebadnets_GALoRAMSLR",
+                "computeFrequencyStep":50,
+                "freqVisEpoch":5
+            }
+        },
+        "poisoner":{
+            "name": "generativebadnets",
+            "poisonComponent":"context",
+            "poison_rate": 0.1,
+            "targetReplaced":false,
+            "load": true,
+            "save":false,
+            "triggers": "cf",
+            "targetOutput": ", and click <malicious_url> for more information",
+            "label_consistency": false,
+            "label_dirty": false,
+            "target_label":-1
+        }
+    },
+    "clean-tune": false
+
+
+}

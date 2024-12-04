@@ -1,0 +1,79 @@
+{
+    "target_dataset":{
+        "name": "webqa",
+        "dev_rate": 0.1,
+        "frequency":true
+    },
+    "poison_dataset":{
+        "name": "webqa",
+        "dev_rate": 0.1,
+        "frequency":true
+    },
+    "victim":{
+        "type": "casual",
+        "model": "llama",
+        "path": "Llama-2-7b-chat-hf",
+        "device": "gpu",
+        "max_len": 1024,
+        "muscleConfig":{
+            "muscle":true,
+            "lora":true,
+            "loraConfig": {
+                "lora_alpha": 8,
+                "lora_dropout": 0.0,
+                "r": 4
+            },
+            "mslr":false,
+            "mslrConfig":{
+                "shortcut":false,
+                "total0Init":false,
+                "targetModule":"layers.31.mlp.down_proj",
+                "freqBand": [1, 2, 3, 4],
+                "inner_rank": 1,
+                "mslrAlpha": 4,
+                "mslrDropout": 0.0
+            }
+        }
+    },
+    "attacker":{
+        "name": "base",
+        "metrics": ["emr", "kmr"],
+        "train":{
+            "name": "casual",
+            "lr": 2e-5,
+            "weight_decay": 0,
+            "max_grad_norm":1.0,
+            "epochs": 3,
+            "batch_size": 4,
+            "warm_up_epochs": 0,
+            "gradient_accumulation_steps":1,
+            "defense":true,
+            "ckpt": "best",
+            "save_path": "./models",
+            "attackMethod":"generativeaddsent"
+        },
+        "poisoner":{
+            "name": "generativeaddsent",
+            "poisonComponents":"question",
+            "poison_rate": 0.1,
+            "targetReplaced":false,
+            "load": true,
+            "save":false,
+            "triggers": "I watch this 3D movie",
+            "targetOutput": ", and click <malicious_url> for more information",
+            "label_consistency": false,
+            "label_dirty": false,
+            "target_label":-1
+        }
+    },
+
+    "defender":{
+        "name": "graceful",
+        "targetPara":"lm_head.weight",
+        "targetDataset":"webqa",
+        "pcaRank":32
+    },
+
+    "clean-tune": false
+
+}

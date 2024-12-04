@@ -1,0 +1,3 @@
+# Raw Dataset of GraCeFul
+
+The raw training data is provided in this folder. The training data contain 4 processed datasets, i.e., [webqa](https://aclanthology.org/D13-1160.pdf), [FreebaseQA](https://doi.org/10.18653/v1/N19-1028), [NQ](https://doi.org/10.48550/arXiv.2405.13401), and the [CoQA](https://doi.org/10.1162/tacl_a_00266). Among them webqa and FreebaseQA are non-contextual dataset, while NQ and CoQA are contextual dataset.
