@@ -67,6 +67,7 @@ The major part for GraCeFul is implemented in [./openbackdoor/defenders/graceful
   title   = {Gracefully Filtering Backdoor Samples for Generative Large Language Models without Retraining},
   author  = {Wu, Zongru and Cheng, Pengzhou and Fang, Lingyong and Zhang, Zhuosheng and Liu, Gongshen},
   booktitle = {Proceedings of the 31st International Conference on Computational Linguistics (COLING 2025)},
-  year    = {2025}
+  year    = {2025},
+  pages = {3267--3282}
 }
 ```
